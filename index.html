@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новогодний подарок 🎄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .snow {
+            position: fixed;
+            top: 0;
+            left:  0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        . screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button, . option {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size:  1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        button:hover, .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        . santa-message {
+            text-align: center;
+            margin:  30px 0;
+        }
+
+        .santa-emoji {
+            font-size: 5em;
+            margin-bottom:  20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .letter {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius:  10px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+            line-height: 1.8;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .start-btn {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 1.2em;
+            padding: 20px;
+        }
+
+        .hearts {
+            text-align: center;
+            font-size: 2em;
+            margin:  20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="snow" id="snow"></div>
+
+    <div class="container">
+        <!-- Экран 1: Приветствие -->
+        <div id="screen1" class="screen active">
+            <h1>🎄 Новогодний сюрприз 🎁</h1>
+            <p style="text-align: center; font-size: 1.2em; margin:  30px 0; line-height: 1.6;">
+                Привет, любимый! ❤️<br><br>
+                Я приготовила для тебя особенный новогодний подарок. <br>
+                Пройди небольшой тест, и тебя ждёт сюрприз! 
+            </p>
+            <button class="start-btn" onclick="startQuiz()">Начать 🎅</button>
+        </div>
+
+        <!-- Экран 2: Вопрос 1 -->
+        <div id="screen2" class="screen">
+            <h1>Вопрос 1</h1>
+            <div class="question">
+                <p>В какой день всё началось?  💕</p>
+                <div class="options">
+                    <button class="option" onclick="checkAnswer(1, false)">15 января 2023</button>
+                    <button class="option" onclick="checkAnswer(1, true)">23 февраля 2023</button>
+                    <button class="option" onclick="checkAnswer(1, false)">1 марта 2023</button>
+                    <button class="option" onclick="checkAnswer(1, false)">14 февраля 2023</button>
+                </div>
+                <p class="error-message" id="error1"></p>
+            </div>
+        </div>
+
+        <!-- Экран 3: Вопрос 2 -->
+        <div id="screen3" class="screen">
+            <h1>Вопрос 2</h1>
+            <div class="question">
+                <p>Где была наша первая встреча? 🌟</p>
+                <div class="options">
+                    <button class="option" onclick="checkAnswer(2, false)">В кафе</button>
+                    <button class="option" onclick="checkAnswer(2, true)">В парке</button>
+                    <button class="option" onclick="checkAnswer(2, false)">В кино</button>
+                    <button class="option" onclick="checkAnswer(2, false)">На концерте</button>
+                </div>
+                <p class="error-message" id="error2"></p>
+            </div>
+        </div>
+
+        <!-- Экран 4: Вопрос 3 -->
+        <div id="screen4" class="screen">
+            <h1>Вопрос 3</h1>
+            <div class="question">
+                <p>Что я тебе подарила в первый раз? 🎁</p>
+                <div class="options">
+                    <button class="option" onclick="checkAnswer(3, true)">Книгу</button>
+                    <button class="option" onclick="checkAnswer(3, false)">Часы</button>
+                    <button class="option" onclick="checkAnswer(3, false)">Шарф</button>
+                    <button class="option" onclick="checkAnswer(3, false)">Фотоальбом</button>
+                </div>
+                <p class="error-message" id="error3"></p>
+            </div>
+        </div>
+
+        <!-- Экран 5: Поздравление от Санты -->
+        <div id="screen5" class="screen">
+            <div class="santa-message">
+                <div class="santa-emoji">🎅</div>
+                <h1>Хо-хо-хо! 🎄</h1>
+                <p style="font-size: 1.2em; margin: 20px 0; line-height: 1.6;">
+                    Поздравляю тебя с Новым Годом! <br><br>
+                    Пусть этот год принесёт тебе счастье, здоровье и исполнение всех желаний!  ✨<br><br>
+                    А теперь у меня есть для тебя особое письмо... 
+                </p>
+                <button onclick="showLetter()">Прочитать письмо 💌</button>
+            </div>
+        </div>
+
+        <!-- Экран 6: Письмо -->
+        <div id="screen6" class="screen">
+            <h1>Письмо для тебя 💕</h1>
+            <div class="hearts">❤️ 💖 💝 💗 💓</div>
+            <div class="letter">
+                <p><strong>Мой дорогой! </strong></p>
+                <br>
+                <p>
+                    Я хочу, чтобы ты знал, как много ты для меня значишь.  
+                    С тобой каждый день — это маленький праздник, наполненный 
+                    теплом, смехом и любовью. 
+                </p>
+                <br>
+                <p>
+                    В этом новом году я желаю нам ещё больше счастливых моментов вместе, 
+                    новых приключений и незабываемых воспоминаний.  Спасибо, что ты есть в моей жизни!
+                </p>
+                <br>
+                <p>
+                    Люблю тебя всем сердцем!  ❤️
+                </p>
+                <br>
+                <p style="text-align: right;"><em>Твоя [Твоё имя]</em></p>
+            </div>
+            <div class="hearts">💕 💞 💖 💗 ❤️</div>
+        </div>
+    </div>
+
+    <script>
+        // Создание снежинок
+        function createSnow() {
+            const snow = document.getElementById('snow');
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style. left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.opacity = Math.random();
+                snow.appendChild(snowflake);
+            }
+        }
+
+        createSnow();
+
+        function startQuiz() {
+            showScreen('screen2');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function checkAnswer(questionNum, isCorrect) {
+            const errorElement = document.getElementById('error' + questionNum);
+            
+            if (isCorrect) {
+                errorElement.textContent = '';
+                if (questionNum === 1) {
+                    showScreen('screen3');
+                } else if (questionNum === 2) {
+                    showScreen('screen4');
+                } else if (questionNum === 3) {
+                    showScreen('screen5');
+                }
+            } else {
+                errorElement.textContent = '❌ Попробуй ещё раз, ты знаешь правильный ответ!';
+            }
+        }
+
+        function showLetter() {
+            showScreen('screen6');
+        }
+    </script>
+</body>
+</html>

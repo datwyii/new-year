@@ -606,9 +606,6 @@
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
-                particle.style.setProperty('--tx', tx + 'px');
-                particle.style.setProperty('--ty', ty + 'px');
-                
                 particle.style.animation = `explode 0.8s ease-out forwards`;
                 particle.style.transform = `translate(${tx}px, ${ty}px)`;
                 

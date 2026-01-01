@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новогодний подарок 🎄</title>
+    <title>С Новым Годом! 🎄</title>
     <style>
         * {
             margin: 0;
@@ -13,22 +13,248 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Lock Screen Styles */
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        #lockScreen.unlocked {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .lock-time {
+            color: white;
+            font-size: 4em;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .lock-date {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+            margin-bottom: 50px;
+        }
+
+        .password-display {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            min-height: 30px;
+        }
+
+        .password-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+
+        .password-dot.filled {
+            opacity: 1;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 300px;
+            width: 100%;
             padding: 20px;
         }
 
+        .key {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .key:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .key:active {
+            transform: scale(0.95);
+        }
+
+        .key.special {
+            opacity: 0.5;
+        }
+
+        .error-shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .lock-error {
+            color: #ff6b6b;
+            margin-top: 20px;
+            min-height: 20px;
+            text-align: center;
+        }
+
+        /* Main Page Styles */
+        #mainPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(180deg, #0a1e42 0%, #1a3a5c 50%, #2c4a6f 100%);
+            overflow: hidden;
+        }
+
+        /* Fireworks */
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: firework 1.5s ease-out forwards;
+        }
+
+        @keyframes firework {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Christmas Tree */
+        .tree-container {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .tree {
+            font-size: 15em;
+            animation: treeGlow 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes treeGlow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        /* Letter/Envelope */
+        .letter-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .envelope {
+            font-size: 6em;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        .letter-container:hover .envelope {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-20px);
+            }
+        }
+
+        .letter-hint {
+            color: white;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0.8;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Snow Effect */
         .snow {
             position: fixed;
             top: 0;
-            left:  0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 100;
         }
 
         .snowflake {
@@ -45,280 +271,379 @@
             }
         }
 
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
+        /* Modal for Letter */
+        #letterModal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-            animation: fadeIn 0.5s ease-in;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.5s;
+        }
+
+        #letterModal.active {
+            display: flex;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
-        . screen {
-            display: none;
+        .modal-content {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 25%, #c44569 50%, #a73a5c 75%, #8b2e4f 100%);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s;
+            position: relative;
         }
 
-        .screen.active {
-            display: block;
+        @keyframes slideIn {
+            from {
+                transform: scale(0.8) translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
 
-        h1 {
-            color: #667eea;
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><text x="10" y="30" font-size="20" opacity="0.1" fill="white">✨</text><text x="60" y="70" font-size="25" opacity="0.1" fill="white">❄️</text><text x="20" y="90" font-size="15" opacity="0.1" fill="white">🎄</text></svg>') repeat;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .modal-content > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 3em;
             text-align: center;
             margin-bottom: 30px;
-            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: titleGlow 2s ease-in-out infinite;
         }
 
-        .question {
-            margin-bottom: 20px;
-        }
-
-        .question p {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        button, . option {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size:  1em;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-align: center;
-        }
-
-        button:hover, .option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        . santa-message {
-            text-align: center;
-            margin:  30px 0;
-        }
-
-        .santa-emoji {
-            font-size: 5em;
-            margin-bottom:  20px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
+        @keyframes titleGlow {
             0%, 100% {
-                transform: translateY(0);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             }
             50% {
-                transform: translateY(-20px);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.3);
             }
         }
 
-        .letter {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius:  10px;
-            border-left: 5px solid #667eea;
-            margin: 20px 0;
+        .modal-message {
+            color: white;
+            font-size: 1.3em;
             line-height: 1.8;
-            font-size: 1.1em;
-            color: #444;
-        }
-
-        .error-message {
-            color: #e74c3c;
             text-align: center;
-            margin-top: 10px;
-            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        .start-btn {
-            width: 100%;
-            margin-top: 20px;
-            font-size: 1.2em;
-            padding: 20px;
-        }
-
-        .hearts {
+        .decorative-elements {
             text-align: center;
             font-size: 2em;
-            margin:  20px 0;
+            margin: 20px 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .lock-time {
+                font-size: 3em;
+            }
+
+            .key {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5em;
+            }
+
+            .tree {
+                font-size: 10em;
+            }
+
+            .envelope {
+                font-size: 4em;
+            }
+
+            .modal-content {
+                padding: 30px;
+            }
+
+            .modal-title {
+                font-size: 2em;
+            }
+
+            .modal-message {
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="snow" id="snow"></div>
-
-    <div class="container">
-        <!-- Экран 1: Приветствие -->
-        <div id="screen1" class="screen active">
-            <h1>🎄 Новогодний сюрприз 🎁</h1>
-            <p style="text-align: center; font-size: 1.2em; margin:  30px 0; line-height: 1.6;">
-                Привет, любимый! ❤️<br><br>
-                Я приготовила для тебя особенный новогодний подарок. <br>
-                Пройди небольшой тест, и тебя ждёт сюрприз! 
-            </p>
-            <button class="start-btn" onclick="startQuiz()">Начать 🎅</button>
+    <!-- Lock Screen -->
+    <div id="lockScreen">
+        <div class="lock-time" id="lockTime">00:00</div>
+        <div class="lock-date" id="lockDate">1 января</div>
+        
+        <div class="password-display" id="passwordDisplay">
+            <div class="password-dot"></div>
+            <div class="password-dot"></div>
+            <div class="password-dot"></div>
+            <div class="password-dot"></div>
         </div>
 
-        <!-- Экран 2: Вопрос 1 -->
-        <div id="screen2" class="screen">
-            <h1>Вопрос 1</h1>
-            <div class="question">
-                <p>В какой день всё началось?  💕</p>
-                <div class="options">
-                    <button class="option" onclick="checkAnswer(1, false)">15 января 2023</button>
-                    <button class="option" onclick="checkAnswer(1, true)">23 февраля 2023</button>
-                    <button class="option" onclick="checkAnswer(1, false)">1 марта 2023</button>
-                    <button class="option" onclick="checkAnswer(1, false)">14 февраля 2023</button>
-                </div>
-                <p class="error-message" id="error1"></p>
-            </div>
+        <div class="lock-error" id="lockError"></div>
+
+        <div class="keypad">
+            <div class="key" data-key="1">1</div>
+            <div class="key" data-key="2">2</div>
+            <div class="key" data-key="3">3</div>
+            <div class="key" data-key="4">4</div>
+            <div class="key" data-key="5">5</div>
+            <div class="key" data-key="6">6</div>
+            <div class="key" data-key="7">7</div>
+            <div class="key" data-key="8">8</div>
+            <div class="key" data-key="9">9</div>
+            <div class="key special" data-key="*">*</div>
+            <div class="key" data-key="0">0</div>
+            <div class="key special" data-key="#">#</div>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <div id="mainPage">
+        <div class="snow" id="snow"></div>
+        
+        <div class="tree-container">
+            <div class="tree">🎄</div>
         </div>
 
-        <!-- Экран 3: Вопрос 2 -->
-        <div id="screen3" class="screen">
-            <h1>Вопрос 2</h1>
-            <div class="question">
-                <p>Где была наша первая встреча? 🌟</p>
-                <div class="options">
-                    <button class="option" onclick="checkAnswer(2, false)">В кафе</button>
-                    <button class="option" onclick="checkAnswer(2, true)">В парке</button>
-                    <button class="option" onclick="checkAnswer(2, false)">В кино</button>
-                    <button class="option" onclick="checkAnswer(2, false)">На концерте</button>
-                </div>
-                <p class="error-message" id="error2"></p>
-            </div>
+        <div class="letter-container" id="letterContainer">
+            <div class="envelope">💌</div>
+            <div class="letter-hint">Нажми на письмо</div>
         </div>
 
-        <!-- Экран 4: Вопрос 3 -->
-        <div id="screen4" class="screen">
-            <h1>Вопрос 3</h1>
-            <div class="question">
-                <p>Что я тебе подарила в первый раз? 🎁</p>
-                <div class="options">
-                    <button class="option" onclick="checkAnswer(3, true)">Книгу</button>
-                    <button class="option" onclick="checkAnswer(3, false)">Часы</button>
-                    <button class="option" onclick="checkAnswer(3, false)">Шарф</button>
-                    <button class="option" onclick="checkAnswer(3, false)">Фотоальбом</button>
-                </div>
-                <p class="error-message" id="error3"></p>
-            </div>
-        </div>
+        <div id="fireworksContainer"></div>
+    </div>
 
-        <!-- Экран 5: Поздравление от Санты -->
-        <div id="screen5" class="screen">
-            <div class="santa-message">
-                <div class="santa-emoji">🎅</div>
-                <h1>Хо-хо-хо! 🎄</h1>
-                <p style="font-size: 1.2em; margin: 20px 0; line-height: 1.6;">
-                    Поздравляю тебя с Новым Годом! <br><br>
-                    Пусть этот год принесёт тебе счастье, здоровье и исполнение всех желаний!  ✨<br><br>
-                    А теперь у меня есть для тебя особое письмо... 
-                </p>
-                <button onclick="showLetter()">Прочитать письмо 💌</button>
-            </div>
-        </div>
-
-        <!-- Экран 6: Письмо -->
-        <div id="screen6" class="screen">
-            <h1>Письмо для тебя 💕</h1>
-            <div class="hearts">❤️ 💖 💝 💗 💓</div>
-            <div class="letter">
-                <p><strong>Мой дорогой! </strong></p>
+    <!-- Letter Modal -->
+    <div id="letterModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="decorative-elements">✨ 🎄 ✨</div>
+            <h1 class="modal-title">С Новым Годом!</h1>
+            <div class="modal-message">
+                <p>🎊 Пусть этот новый год принесёт тебе:</p>
                 <br>
-                <p>
-                    Я хочу, чтобы ты знал, как много ты для меня значишь.  
-                    С тобой каждый день — это маленький праздник, наполненный 
-                    теплом, смехом и любовью. 
-                </p>
+                <p>💫 Счастье и радость каждый день</p>
+                <p>🌟 Исполнение всех желаний</p>
+                <p>❤️ Любовь и тепло близких</p>
+                <p>🎁 Приятные сюрпризы</p>
+                <p>✨ Яркие эмоции и впечатления</p>
                 <br>
-                <p>
-                    В этом новом году я желаю нам ещё больше счастливых моментов вместе, 
-                    новых приключений и незабываемых воспоминаний.  Спасибо, что ты есть в моей жизни!
-                </p>
-                <br>
-                <p>
-                    Люблю тебя всем сердцем!  ❤️
-                </p>
-                <br>
-                <p style="text-align: right;"><em>Твоя [Твоё имя]</em></p>
+                <p>С любовью! 💕</p>
             </div>
-            <div class="hearts">💕 💞 💖 💗 ❤️</div>
+            <div class="decorative-elements">🎉 ❄️ 🎉</div>
         </div>
     </div>
 
     <script>
-        // Создание снежинок
+        // Lock Screen Logic
+        let password = '';
+        const correctPassword = '2026';
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('lockTime').textContent = `${hours}:${minutes}`;
+
+            const options = { day: 'numeric', month: 'long' };
+            document.getElementById('lockDate').textContent = now.toLocaleDateString('ru-RU', options);
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', function() {
+                const value = this.dataset.key;
+                
+                if (value === '*') {
+                    // Delete last digit
+                    password = password.slice(0, -1);
+                    updatePasswordDisplay();
+                } else if (value === '#') {
+                    // Submit password
+                    checkPassword();
+                } else {
+                    // Add digit
+                    if (password.length < 4) {
+                        password += value;
+                        updatePasswordDisplay();
+                        
+                        if (password.length === 4) {
+                            setTimeout(checkPassword, 300);
+                        }
+                    }
+                }
+            });
+        });
+
+        function updatePasswordDisplay() {
+            const dots = document.querySelectorAll('.password-dot');
+            dots.forEach((dot, index) => {
+                if (index < password.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            });
+        }
+
+        function checkPassword() {
+            const lockError = document.getElementById('lockError');
+            const lockScreen = document.getElementById('lockScreen');
+
+            if (password === correctPassword) {
+                lockError.textContent = '';
+                lockScreen.classList.add('unlocked');
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    startFireworks();
+                }, 500);
+            } else {
+                lockError.textContent = '❌ Неверный пароль';
+                document.getElementById('passwordDisplay').classList.add('error-shake');
+                setTimeout(() => {
+                    document.getElementById('passwordDisplay').classList.remove('error-shake');
+                }, 500);
+                password = '';
+                updatePasswordDisplay();
+            }
+        }
+
+        // Snow Effect
         function createSnow() {
             const snow = document.getElementById('snow');
             for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.className = 'snowflake';
                 snowflake.innerHTML = '❄';
-                snowflake.style. left = Math.random() * 100 + '%';
+                snowflake.style.left = Math.random() * 100 + '%';
                 snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
                 snowflake.style.animationDelay = Math.random() * 5 + 's';
-                snowflake.style.opacity = Math.random();
+                snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+                snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
                 snow.appendChild(snowflake);
             }
         }
 
         createSnow();
 
-        function startQuiz() {
-            showScreen('screen2');
-        }
-
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
-
-        function checkAnswer(questionNum, isCorrect) {
-            const errorElement = document.getElementById('error' + questionNum);
+        // Fireworks
+        function createFirework(x, y) {
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4ecdc4', '#a8e6cf', '#ff8b94'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
             
-            if (isCorrect) {
-                errorElement.textContent = '';
-                if (questionNum === 1) {
-                    showScreen('screen3');
-                } else if (questionNum === 2) {
-                    showScreen('screen4');
-                } else if (questionNum === 3) {
-                    showScreen('screen5');
-                }
-            } else {
-                errorElement.textContent = '❌ Попробуй ещё раз, ты знаешь правильный ответ!';
+            // Create explosion particles
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.background = color;
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = Math.random() * 100 + 50;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.animation = `explode 0.8s ease-out forwards`;
+                particle.style.transform = `translate(${tx}px, ${ty}px)`;
+                
+                document.getElementById('fireworksContainer').appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 800);
             }
         }
 
-        function showLetter() {
-            showScreen('screen6');
+        function randomFirework() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight * 0.5);
+            createFirework(x, y);
         }
+
+        function startFireworks() {
+            setInterval(randomFirework, 1000);
+            // Initial burst
+            for (let i = 0; i < 3; i++) {
+                setTimeout(randomFirework, i * 300);
+            }
+        }
+
+        // Letter Modal
+        document.getElementById('letterContainer').addEventListener('click', function() {
+            document.getElementById('letterModal').classList.add('active');
+        });
+
+        function closeModal() {
+            document.getElementById('letterModal').classList.remove('active');
+        }
+
+        // Close modal on background click
+        document.getElementById('letterModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -58,18 +58,6 @@ function checkAnswer(isCorrect) {
     }
 }
 
-// Add fade out animation to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeOutScale {
-        to {
-            opacity: 0;
-            transform: scale(0.9) translateY(-20px);
-        }
-    }
-`;
-document.head.appendChild(style);
-
 // Initialize hearts on page load
 window.addEventListener('DOMContentLoaded', () => {
     createHearts();

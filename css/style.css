@@ -378,3 +378,11 @@ body {
         max-width: 200px;
     }
 }
+
+/* Fade out animation for quiz container */
+@keyframes fadeOutScale {
+    to {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+}

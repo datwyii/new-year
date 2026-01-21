@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Новым годом! 🎄</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="card-page">
+    <!-- Floating hearts animation -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Sparkles animation -->
+    <div class="sparkles-container" id="sparklesContainer"></div>
+
+    <div class="card-container">
+        <div class="greeting-card">
+            <div class="card-front">
+                <h2>Открой меня 💝</h2>
+            </div>
+            <div class="card-inside">
+                <div class="card-content">
+                    <div class="image-container">
+                        <img src="assets/photo.jpg" alt="Romantic Image" class="romantic-image">
+                    </div>
+                    <div class="greeting-text">
+                        <h2>С Новым годом 🎄</h2>
+                        <p>Спасибо, что ты есть 💖</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Initialize card animations
+        window.addEventListener('DOMContentLoaded', () => {
+            createHearts();
+            createSparkles();
+            
+            // Open card after a short delay
+            setTimeout(() => {
+                const card = document.querySelector('.greeting-card');
+                card.classList.add('opened');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
